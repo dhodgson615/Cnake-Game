@@ -47,7 +47,7 @@ The game is initialized using the following steps:
 1. `initscr()` - Initialize the ncurses library
 2. `curs_set(0)` - Hide the cursor
 3. `keypad(stdscr, TRUE)` - Enable arrow key input
-4. ` noecho()` - Disable keyboard echoing (writing characters to the terminal)
+4. `noecho()` - Disable keyboard echoing (writing characters to the terminal)
 5. `timeout(-1)` - Wait for a keypress to start the game
 6. Enable the colors
 7. `snake_length = 1` - Start the snake
