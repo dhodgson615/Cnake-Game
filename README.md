@@ -26,9 +26,7 @@ Cnake Game is a classic Snake game implemented in C. The game involves controlli
 The snake itself is defined as an array of coordinates, created using a C `struct`.
 
 ```c
-typedef struct {
-    int x, y;
-} Point;
+typedef struct { int x, y; } Point;
 
 Point snake[100];
 ```
