@@ -8,7 +8,7 @@ Cnake Game is a classic Snake game implemented in C. The game involves controlli
 - The snake grows when it eats food
 - The game ends when the snake collides with the walls or itself
 
-# How It Works
+## How It Works
 
 `snake.c` includes `ncurses`, `stdlib`, and `time` and defines the dimensions of the grid as 40x20.
 
@@ -21,6 +21,8 @@ Cnake Game is a classic Snake game implemented in C. The game involves controlli
 #define HEIGHT 20
 ```
 
+### Representing the Snake
+
 The snake itself is defined as an array of coordinates, created using a C `struct`.
 
 ```c
@@ -31,6 +33,8 @@ typedef struct {
 Point snake[100];
 ```
 
+### Global Variables
+
 Several important variables are defined here:
 
 ```c
@@ -39,6 +43,8 @@ int food_x, food_y;
 int direction;
 int game_over = 0;
 ```
+
+### Initializing the Game
 
 The game is initialized using the following steps:
 
@@ -74,6 +80,8 @@ void init_game() {
 }
 ```
 
+### Rendering the Game
+
 The `draw_game()` function clears the screen and draws the walls, snake, and food.
 
 ```c
@@ -95,6 +103,8 @@ void draw_game() {
 }
 ```
 
+### Generating the Food
+
 The `spawn_food()` function randomly generates the position of food within valid grid coordinates.
 
 ```c
@@ -103,6 +113,8 @@ void spawn_food() {
     food_y = 2 + rand() % (HEIGHT - 2);  ///< Randomize the y-coordinate of the food
 }
 ```
+
+### Handling Snake Movement and Growth
 
 The `update_snake()` function updates the snake’s position based on the current direction. It checks for collisions with walls, the snake itself, and food. If the snake eats food, it grows in length. The snake’s body is then updated to reflect its new position.
 
@@ -139,6 +151,8 @@ void update_snake() {
     snake[0] = new_head;  ///< Set the new head position
 }
 ```
+
+### Main Loop
 
 The `main()` function is the game loop. It initializes the game, waits for the player to press a direction key, and runs the game until it ends. During the game loop, it handles user input, updates the snake’s position, and draws the game.
 
