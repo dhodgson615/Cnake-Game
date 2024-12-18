@@ -2,15 +2,13 @@
 #include <stdlib.h>
 #include <time.h>
 
-// Updated dimensions
 #define WIDTH 40
 #define HEIGHT 20
 
-typedef struct {
-    int x, y;
-} Point;
+typedef struct { int x, y; } Point;
 
 Point snake[100];
+
 int snake_length, food_x, food_y, direction;
 int game_over = 0;
 
@@ -29,7 +27,7 @@ void init_game() {
     food_x = 2 + rand() % (WIDTH - 4);
     food_y = 2 + rand() % (HEIGHT - 2);
 
-    direction = 0;  // No direction initially
+    direction = 0;
 }
 
 void draw_game() {
@@ -88,14 +86,14 @@ int main() {
     srand(time(0));
     init_game();
 
-    // Wait for arrow key input to start the game
+    // Wait for arrow key input
     while (direction == 0) {
         int key = getch();
         if (key == KEY_UP || key == KEY_DOWN || key == KEY_LEFT || key == KEY_RIGHT)
             direction = key;
     }
 
-    timeout(100);  // Set a delay for the game loop
+    timeout(100);  // Set a 0.1 second delay
 
     while (!game_over) {
         int key = getch();
@@ -108,11 +106,9 @@ int main() {
                 direction = key;
             }
         }
-
         update_snake();
         draw_game();
     }
-
     endwin();
     printf("Game Over! Final Length: %d\n", snake_length);
     return 0;
