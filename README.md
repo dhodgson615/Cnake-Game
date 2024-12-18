@@ -36,9 +36,7 @@ Point snake[100];
 Several important variables are defined here:
 
 ```c
-int snake_length;
-int food_x, food_y;
-int direction;
+int snake_length; food_x, food_y; direction;
 int game_over = 0;
 ```
 
@@ -51,53 +49,71 @@ The game is initialized using the following steps:
 3. `keypad(stdscr, TRUE)` - Enable arrow key input
 4. ` noecho()` - Disable keyboard echoing (writing characters to the terminal)
 5. `timeout(-1)` - Wait for a keypress to start the game
-6. `snake_length = 1` - Start the snake
-7. Setting the snake's starting coordinates
-8. Spawning the first food in valid coordinates
-9. Setting no initial movement direction for the snake
+6. Enable the colors
+7. `snake_length = 1` - Start the snake
+8. Setting the snake's starting coordinates
+9. Spawning the first food in valid coordinates
+10. Setting no initial movement direction for the snake
 
 Which are outlined in this method:
 
 ```c
 void init_game() {
-    initscr();             ///< Initialize the ncurses library
-    curs_set(0);           ///< Hide the cursor
-    keypad(stdscr, TRUE);  ///< Enable keypad input (e.g., arrow keys)
-    noecho();              ///< Disable echoing of input characters
-    timeout(-1);           ///< Wait for a keypress before starting the game
+    initscr();            ///< Initialize the ncurses library
+    curs_set(0);          ///< Hide the cursor
+    keypad(stdscr, TRUE); ///< Enable keypad input (e.g., arrow keys)
+    noecho();             ///< Disable echoing of input characters
+    timeout(-1);          ///< Wait for a keypress before starting the game
+
+    // Enable color
+    if (has_colors()) {
+        start_color();
+        // Define color pairs
+        init_pair(1, COLOR_YELLOW, COLOR_BLACK); // Snake
+        init_pair(2, COLOR_RED, COLOR_BLACK);    // Walls
+        init_pair(3, COLOR_GREEN, COLOR_BLACK);  // Food
+    }
 
     snake_length = 1;
-    snake[0].x = WIDTH / 2;   ///< Set the snake's initial x-coordinate
-    snake[0].y = HEIGHT / 2;  ///< Set the snake's initial y-coordinate
+    snake[0].x = WIDTH / 2;  ///< Set the snake's initial x-coordinate
+    snake[0].y = HEIGHT / 2; ///< Set the snake's initial y-coordinate
 
     // Ensure food spawns within a valid range
     food_x = 2 + rand() % (WIDTH - 4);
     food_y = 2 + rand() % (HEIGHT - 2);
 
-    direction = 0;  ///< No direction initially
+    direction = 0; // No direction initially
 }
 ```
 
 ### Rendering the Game
 
-The `draw_game()` function clears the screen and draws the walls, snake, and food.
+The `draw_game()` function clears the screen and draws the walls, snake, and food. `attron()` and `attroff()` are used to ensure that everything is colored correctly.
 
 ```c
 void draw_game() {
-    clear();  ///< Clear the screen
+    clear();
 
     // Draw top and bottom walls
+    attron(COLOR_PAIR(2));
     for (int i = 0; i < WIDTH; i++) mvprintw(0, i, "#");
     for (int i = 0; i < WIDTH; i++) mvprintw(HEIGHT, i, "#");
 
     // Draw left and right walls
     for (int i = 0; i <= HEIGHT; i++) mvprintw(i, 0, "#");
     for (int i = 0; i <= HEIGHT; i++) mvprintw(i, WIDTH, "#");
+    attroff(COLOR_PAIR(2));
 
-    mvprintw(food_y, food_x, "O"); // Draw food
+    // Draw food
+    attron(COLOR_PAIR(3));
+    mvprintw(food_y, food_x, "O");
+    attroff(COLOR_PAIR(3));
 
+    // Draw snake
+    attron(COLOR_PAIR(1));
     for (int i = 0; i < snake_length; i++)
-        mvprintw(snake[i].y, snake[i].x, "o"); // Draw snake body
+        mvprintw(snake[i].y, snake[i].x, "o");
+    attroff(COLOR_PAIR(1));
 }
 ```
 
@@ -119,8 +135,6 @@ The `update_snake()` function updates the snake’s position based on the curren
 ```c
 void update_snake() {
     Point new_head = snake[0];
-
-    // Move the snake in the current direction
     switch (direction) {
         case KEY_UP:    new_head.y--; break;
         case KEY_DOWN:  new_head.y++; break;
@@ -128,25 +142,25 @@ void update_snake() {
         case KEY_RIGHT: new_head.x++; break;
     }
 
-    // Check for collisions with walls
+    // Check collisions with walls
     if (new_head.x <= 0 || new_head.x >= WIDTH || new_head.y <= 0 || new_head.y >= HEIGHT)
         game_over = 1;
 
-    // Check for collisions with the snake itself
+    // Check collisions with self
     for (int i = 0; i < snake_length; i++)
         if (snake[i].x == new_head.x && snake[i].y == new_head.y)
             game_over = 1;
 
-    // Check for food collision
+    // Check food collision
     if (new_head.x == food_x && new_head.y == food_y) {
-        snake_length++;        ///< Increase snake's length
-        spawn_food();          ///< Spawn new food
+        snake_length++;
+        spawn_food();
     }
 
-    // Update the snake's body
+    // Update snake body
     for (int i = snake_length - 1; i > 0; i--)
-        snake[i] = snake[i - 1];  ///< Move each body segment to the position of the previous segment
-    snake[0] = new_head;  ///< Set the new head position
+        snake[i] = snake[i - 1];
+    snake[0] = new_head;
 }
 ```
 
@@ -156,37 +170,34 @@ The `main()` function is the game loop. It initializes the game, waits for the p
 
 ```c
 int main() {
-    srand(time(0));  ///< Seed the random number generator with the current time
-    init_game();     ///< Initialize the game state
+    srand(time(0));
+    init_game();
 
-    // Wait for arrow key input to start the game
+    // Wait for arrow key input
     while (direction == 0) {
-        int key = getch();  ///< Get user input
+        int key = getch();
         if (key == KEY_UP || key == KEY_DOWN || key == KEY_LEFT || key == KEY_RIGHT)
-            direction = key;  ///< Set the initial direction
+            direction = key;
     }
 
-    timeout(100);  ///< Set a timeout for the game loop (100ms)
+    timeout(100);  // Set a 0.1 second delay between each frame
 
-    // Game loop
     while (!game_over) {
-        int key = getch();  ///< Get user input for direction change
+        int key = getch();
         if (key != ERR && (key == KEY_UP || key == KEY_DOWN || key == KEY_LEFT || key == KEY_RIGHT)) {
             // Prevent reversing direction
             if ((direction == KEY_UP && key != KEY_DOWN) ||
                 (direction == KEY_DOWN && key != KEY_UP) ||
                 (direction == KEY_LEFT && key != KEY_RIGHT) ||
                 (direction == KEY_RIGHT && key != KEY_LEFT)) {
-                direction = key;  ///< Update the direction if valid
+                direction = key;
             }
         }
-
-        update_snake();  ///< Update the snake's position
-        draw_game();     ///< Redraw the game screen
+        update_snake();
+        draw_game();
     }
-
-    endwin();  ///< End ncurses mode
-    printf("Game Over! Final Length: %d\n", snake_length);  ///< Print the final game over message
+    endwin();
+    printf("Game Over! Final Length: %d\n", snake_length);
     return 0;
 }
 ```
