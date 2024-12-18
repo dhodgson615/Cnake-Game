@@ -7,7 +7,7 @@
 
 typedef struct { int x, y; } Point;
 
-Point snake[100];
+Point snake[256];
 
 int snake_length, food_x, food_y, direction;
 int game_over = 0;
