@@ -13,11 +13,11 @@ int snake_length, food_x, food_y, direction;
 int game_over = 0;
 
 void init_game() {
-    initscr();             // Initialize ncurses
-    curs_set(0);           // Hide cursor
-    keypad(stdscr, TRUE);  // Enable arrow keys
-    noecho();              // Disable key echo
-    timeout(-1);           // Wait for keypress before starting
+    initscr();            ///< Initialize ncurses
+    curs_set(0);          ///< Hide cursor
+    keypad(stdscr, TRUE); ///< Enable arrow keys
+    noecho();             ///< Disable key echo
+    timeout(-1);          ///< Wait for keypress before starting
 
     // Enable color
     if (has_colors()) {
@@ -28,26 +28,24 @@ void init_game() {
         init_pair(3, COLOR_GREEN, COLOR_BLACK);  // Food
     }
 
+    // Initialize snake
     snake_length = 1;
     snake[0].x = WIDTH / 2;
     snake[0].y = HEIGHT / 2;
+    direction = 0;
 
-    // Ensure food spawns within a valid range
+    // Spawn first food
     food_x = 2 + rand() % (WIDTH - 4);
     food_y = 2 + rand() % (HEIGHT - 2);
-
-    direction = 0;
 }
 
 void draw_game() {
     clear();
 
-    // Draw top and bottom walls
+    // Draw walls
     attron(COLOR_PAIR(2));
     for (int i = 0; i < WIDTH; i++) mvprintw(0, i, "#");
     for (int i = 0; i < WIDTH; i++) mvprintw(HEIGHT, i, "#");
-
-    // Draw left and right walls
     for (int i = 0; i <= HEIGHT; i++) mvprintw(i, 0, "#");
     for (int i = 0; i <= HEIGHT; i++) mvprintw(i, WIDTH, "#");
     attroff(COLOR_PAIR(2));
