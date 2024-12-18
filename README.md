@@ -218,4 +218,10 @@ int main() {
 Use the following command to compile the game:
 
 ```bash
-gcc -o snake_game snake_game.c -lncurses
+gcc -o snake_game snake.c -lncurses
+```
+
+Use the following command to run the game:
+```bash
+./snake_game
+```
