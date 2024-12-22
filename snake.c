@@ -7,7 +7,7 @@
 
 typedef struct { int x, y; } Point;
 
-Point snake[256];
+Point snake[4096]; // Updated to higher value
 
 int snake_length, food_x, food_y, direction;
 int game_over = 0;
