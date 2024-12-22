@@ -111,8 +111,7 @@ void draw_game() {
 
     // Draw snake
     attron(COLOR_PAIR(1));
-    for (int i = 0; i < snake_length; i++)
-        mvprintw(snake[i].y, snake[i].x, "o");
+    for (int i = 0; i < snake_length; i++) mvprintw(snake[i].y, snake[i].x, "o");
     attroff(COLOR_PAIR(1));
 }
 ```
