@@ -142,23 +142,16 @@ void update_snake() {
     }
 
     // Check collisions with walls
-    if (new_head.x <= 0 || new_head.x >= WIDTH || new_head.y <= 0 || new_head.y >= HEIGHT)
-        game_over = 1;
+    if (new_head.x <= 0 || new_head.x >= WIDTH || new_head.y <= 0 || new_head.y >= HEIGHT) game_over = 1;
 
     // Check collisions with self
-    for (int i = 0; i < snake_length; i++)
-        if (snake[i].x == new_head.x && snake[i].y == new_head.y)
-            game_over = 1;
+    for (int i = 0; i < snake_length; i++) if (snake[i].x == new_head.x && snake[i].y == new_head.y) game_over = 1;
 
     // Check food collision
-    if (new_head.x == food_x && new_head.y == food_y) {
-        snake_length++;
-        spawn_food();
-    }
+    if (new_head.x == food_x && new_head.y == food_y) { snake_length++; spawn_food(); }
 
     // Update snake body
-    for (int i = snake_length - 1; i > 0; i--)
-        snake[i] = snake[i - 1];
+    for (int i = snake_length - 1; i > 0; i--) snake[i] = snake[i - 1];
     snake[0] = new_head;
 }
 ```
