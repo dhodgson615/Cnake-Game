@@ -28,7 +28,7 @@ The snake itself is defined as an array of coordinates, created using a C `struc
 ```c
 typedef struct { int x, y; } Point;
 
-Point snake[100];
+Point snake[256];
 ```
 
 ### Global Variables
