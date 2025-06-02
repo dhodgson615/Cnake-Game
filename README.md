@@ -1,6 +1,6 @@
 # Cnake Game
 
-Cnake Game is a classic Snake game implemented in C. The game involves controlling a snake to eat food and grow in length while avoiding collisions with the walls or itself. It works using the `ncurses` library. The game is played within a terminal, where the player controls the snake using the arrow keys to eat food and grow longer while avoiding collisions with walls and itself.
+Cnake Game is the classic Snake game implemented in C. The game involves controlling a snake to eat food and grow in length while avoiding collisions with the walls or itself. It works using the `ncurses` library. The game is played within a terminal, where the player controls the snake using the arrow keys to eat food and grow longer while avoiding collisions with walls and itself.
 
 ## What It Does
 
