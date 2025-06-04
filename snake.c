@@ -5,7 +5,9 @@
 #define WIDTH 40
 #define HEIGHT 20
 
-typedef struct { int x, y; } Point;
+typedef struct {
+    int x, y;
+} Point;
 
 Point snake[256];
 
